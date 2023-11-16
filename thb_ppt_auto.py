@@ -19,6 +19,7 @@ from pptx.util import Pt
 from pptx.dml.color import RGBColor
 import re
 
+# 測試 1234565756
 
 # 圖片儲存位置
 img_save_path = r"C:\Users\User\Desktop\ppt_自動化\result"
