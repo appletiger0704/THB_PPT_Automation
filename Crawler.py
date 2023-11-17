@@ -22,12 +22,13 @@ os.chdir(img_save_path)
 now = datetime.now()
 one_day = timedelta(days = 1)
 one_hour = timedelta(hours = 1)
-yesterday = now - one_day
-next_day = now + one_day
-day_after_tomorrow = now + 2*one_day
 one_hours_ago = now - one_hour
 
-# webdriver
+# yesterday = now - one_day
+# next_day = now + one_day
+# day_after_tomorrow = now + 2*one_day
+
+
 driver = webdriver.Chrome()
 
 # 擷取氣象局圖資網址 (除了QPF)
@@ -35,19 +36,16 @@ def get_image_url(url, location, item):
     
     url_list = []
     try:
-        
         driver.get(url)
         for i in location :
-            
-            img_url = driver.find_elements(By.CLASS_NAME, "img-responsive")[i].get_attribute("src")
+            element = driver.find_elements(By.CLASS_NAME, "img-responsive")[i]
+            img_url = element.get_attribute("src")
             url_list.append(img_url)
     except Exception as e:
-        
         print(f"獲取{item}網址時發生未預期的錯誤：{e}")
     finally:
-        
-
         return url_list
+
 # 儲存成png檔案
 def fetch_image(url, image_name):
     
@@ -58,7 +56,7 @@ def fetch_image(url, image_name):
     elif url == fr"http://tidpweather.vpnplus.to:50020/RainMap/Taiwan/TW_{now.year}{now.month}{now.day}_{now.hour}00.png" and response.status_code != 200:
            print(f"RainMap未更新{now.hour}累積雨量，採用前一小時資料")
            E_url = rf"http://tidpweather.vpnplus.to:50020/RainMap/Taiwan/TW_{now.year}{now.month}{now.day}_{one_hours_ago.hour}00.png"
-           fetch_image(E_url, "E_image") 
+           fetch_image(E_url, "E_image")
     else :
          print(f"{image_name} 圖資未更新或是發生預期外錯誤, 錯誤代碼: {response.status_code}")
 
@@ -90,6 +88,7 @@ def combine_image(QPF_list, forecast_range):
         bg.paste(image, (x*1245, y*1500))
     bg.save(f"{forecast_range}hr_total.png")
 
+
 # 地面天氣圖
 SWM_url = get_image_url("https://www.cwa.gov.tw/V8/C/W/analysis.html", [2], "地面天氣圖")
 fetch_image(SWM_url[0], "SWM")
@@ -109,7 +108,7 @@ button.click()
 Satellite_Images_URL = driver.find_elements(By.CLASS_NAME, "img-responsive")[1].get_attribute("src")
 fetch_image(Satellite_Images_URL, "Satellite")
 
-# CWA定量降水網址
+# CWA定量降水
 location_range = list(range(2,10)) # list中第2~10是QPF網址
 QPF_url = get_image_url("https://www.cwa.gov.tw/V8/C/P/QPF.html", location_range, "QPF")
 QPF_list = QPF_fetch_image(QPF_url)
@@ -120,16 +119,15 @@ combine_image(QPF_12hr, 12)
 
 driver.close()
 
+# # 公司_今日累積雨量圖資
+# E_url = rf"http://tidpweather.vpnplus.to:50020/RainMap/Taiwan/TW_{now.year}{now.month}{now.day}_{now.hour}00.png"
+# fetch_image(E_url, "E_image")
 
-# 公司_今日累積雨量圖資
-E_url = rf"http://tidpweather.vpnplus.to:50020/RainMap/Taiwan/TW_{now.year}{now.month}{now.day}_{now.hour}00.png"
-fetch_image(E_url, "E_image")
+# # 公司_每日06時累積雨量
+# day = now.strftime("%Y%m%d")
+# E_url = fr"http://tidpweather.vpnplus.to:50020/RainMap/Taiwan/TW_{now.year}{now.month}{now.day}_0600.png"
+# fetch_image(E_url, "E_06_image")
 
-# 公司_每日06時累積雨量
-day = now.strftime("%Y%m%d")
-E_url = fr"http://tidpweather.vpnplus.to:50020/RainMap/Taiwan/TW_{now.year}{now.month}{now.day}_0600.png"
-fetch_image(E_url, "E_06_image")
-
-# 公司_昨日累積雨量
-E_url = fr"http://tidpweather.vpnplus.to:50020/RainMap/Taiwan/TW_{now.year}{now.month}{now.day}_0000.png"
-fetch_image(E_url, "E_yday_image")
+# # 公司_昨日累積雨量
+# E_url = fr"http://tidpweather.vpnplus.to:50020/RainMap/Taiwan/TW_{now.year}{now.month}{now.day}_0000.png"
+# fetch_image(E_url, "E_yday_image")
