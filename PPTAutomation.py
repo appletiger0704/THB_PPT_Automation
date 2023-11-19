@@ -24,6 +24,7 @@ os.chdir(r"C:\Users\User\Desktop\ppt_自動化\result")
 
 try:
     prs = Presentation("本局-20231113 未來三日天氣分析報告.pptx")
+    
 except Exception as e:
     print(e)
     
@@ -48,6 +49,7 @@ def font(textbox, Date_String, RGB, size):
 def update_date(slide, re_express, Date_String, RGB, size):
     
     pattern = re.compile(re_express)
+    
     for shape in slide.shapes:
         try:
             if shape.has_text_frame:
@@ -56,6 +58,7 @@ def update_date(slide, re_express, Date_String, RGB, size):
                 if re.search(pattern, raw_text):
                     font(shape, Date_String, RGB, size)
                     break 
+                
         except Exception as e:
             print(f"{slide} update date have unexpected exception: {e}")
 
@@ -111,6 +114,7 @@ table_update_date(seventh_slide, 3, 6, RGBColor(00,00,00), 18)
 
 # 更換圖資
 def change_img(slide, img, left):
+    
     for shape in slide.shapes:
         if shape.shape_type == 13 and (left - 50000<= shape.left <= left + 50000): # 13代表圖片
             left, top, width, height = shape.left, shape.top, shape.width, shape.height
