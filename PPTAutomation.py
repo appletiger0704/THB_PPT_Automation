@@ -15,21 +15,21 @@ import re
 import os
 
 now = datetime.now()
-one_day = timedelta(days = 1)
-yesterday = now - one_day
-next_day = now + one_day
-day_after_tomorrow = now + 2*one_day
+yesterday = now - timedelta(days = 1)
+next_day = now + timedelta(days = 1)
+day_after_tomorrow = now + timedelta(days = 2)
 
-os.chdir(r"C:\Users\User\Desktop\ppt_自動化\result")
+path = rf"C:\Users\User\Desktop\ppt_自動化\{now.year}{now.month}{now.day}"
+ppt_path = r"C:\Users\User\Desktop\ppt_自動化\result\本局-20231113 未來三日天氣分析報告.pptx"
+os.chdir(path)
 
 try:
-    prs = Presentation("本局-20231113 未來三日天氣分析報告.pptx")
+    prs = Presentation(ppt_path)
     
 except Exception as e:
     print(e)
     
 def convert_to_minguo(year):
-    
     return year - 1911
 
 # 字型設定
@@ -47,7 +47,6 @@ def font(textbox, Date_String, RGB, size):
 
 # 更新文字方塊日期
 def update_date(slide, re_express, Date_String, RGB, size):
-    
     pattern = re.compile(re_express)
     
     for shape in slide.shapes:
@@ -60,11 +59,10 @@ def update_date(slide, re_express, Date_String, RGB, size):
                     break 
                 
         except Exception as e:
-            print(f"{slide} update date have unexpected exception: {e}")
+            print(f"{slide} update have unexpected exception: {e}")
 
 # 更新表格內日期
 def table_update_date(slide, start, end, RGB, size):
-    
     for shape in slide.shapes:
         if shape.shape_type == MSO_SHAPE_TYPE.TABLE:
             for i in range(start, end):

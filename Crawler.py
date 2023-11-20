@@ -13,18 +13,20 @@ from selenium.webdriver.common.by import By
 from io import BytesIO
 from PIL import Image
 from datetime import datetime, timedelta
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import threading
 import re
 
 
 now = datetime.now()
-one_day = timedelta(days = 1)
-one_hour = timedelta(hours = 1)
-one_hours_ago = now - one_hour
-# yesterday = now - one_day
-# next_day = now + one_day
-# day_after_tomorrow = now + 2*one_day
+one_hours_ago = now - timedelta(hours = 1)
+# yesterday = now - timedelta(days = 1)
+# next_day = now + timedelta(days = 1)
+# day_after_tomorrow = now + timedelta(days = 2)
 
 # 圖片儲存位置
+
 path = rf"C:\Users\User\Desktop\ppt_自動化\{now.year}{now.month}{now.day}"
 
 if not os.path.exists(path):
@@ -47,33 +49,46 @@ URL ={
 
 # 設置webdriver頁面加載策略 (normal、eager、none)
 options = Options()
-options.page_load_strategy = "eager"
+# selenium headless模式，不顯示視窗
+options.add_argument("--headless")
+options.page_load_strategy = "normal"
 
 driver = webdriver.Chrome(options=options)
 
+
+def write_txt(text):
+    date = now.strftime("%y%m%d")
+    with open(os.path.join(path, f"{date}_img.txt"), 'a') as file:
+        file.write(text + "\n")
+        
+
+
 # 擷取氣象局圖資網址 (除了QPF)
 def get_image_url(url, location, item):
-    
     url_list = []
     
     try:
+        driver = webdriver.Chrome(options=options)
         driver.get(url)
         
         for i in location :
-            element = driver.find_elements(By.CLASS_NAME, "img-responsive")[i]
-            img_url = element.get_attribute("src")
+            # 先等瀏覽器載入所有元素，最多等10秒鐘
+            elements = WebDriverWait(driver, 10).until(
+            EC.presence_of_all_elements_located((By.CLASS_NAME, "img-responsive")))
+            
+            img_url = elements[i].get_attribute("src")
             url_list.append(img_url)
             
     except Exception as e:
-        print(f"{item} Exception:{e}")
+        write_txt(f"{item} Exception:{e}")
         
     finally:
+        driver.quit()
         return url_list
 
 
-# 儲存成png檔案
+# 儲存成png檔案ng檔案
 def fetch_image(url, image_name):
-    
     response = requests.get(url)
     
     if response.status_code == 200 :
@@ -81,16 +96,17 @@ def fetch_image(url, image_name):
             image.save(os.path.join(path, f"{image_name}.png"))
             
     elif url == URL["RainMap_accumulate"] and response.status_code != 200:
+           write_txt(f"RainMap has not been update cumulate rainfull for {now.hour}, using previous hours data")
            print(f"RainMap has not been update cumulate rainfull for {now.hour}, using previous hours data")
            fetch_image(URL["RainMap_oneHourAgo"], "E_image")
            
     else :
+         write_txt(f"{image_name} Exception:{response.status_code}" + "\n")
          print(f"{image_name} Exception:{response.status_code}")
 
 
 # 擷取QPF圖資網址
 def QPF_fetch_image(QPF_url):
-    
     QPF_list = []
     
     for url in QPF_url:
@@ -105,14 +121,13 @@ def QPF_fetch_image(QPF_url):
             QPF_list.append(QPF_image)
             
         except Exception as e:
-            print(f"QPF Exception：{e}")
+            write_txt(f"QPF Exception：{e}")
             
     return QPF_list
 
 
 # 結合QPF圖資
 def combine_image(QPF_list, forecast_range):
-    
     bg = Image.new("RGBA", (2490, 3000), "#FFFFFF")
     
     for i in range(1,5):
@@ -125,39 +140,67 @@ def combine_image(QPF_list, forecast_range):
 
 
 # 地面天氣圖
-SWM_url = get_image_url(URL["SWM"], [2], "地面天氣圖")
-fetch_image(SWM_url[0], "SWM")
+def SWM():
+    SWM_url = get_image_url(URL["SWM"], [2], "地面天氣圖")
+    fetch_image(SWM_url[0], "SWM")
 
 # 雷達迴波圖
-Radar_url = get_image_url(URL["Radar"], [1], "雷達迴波圖")
-fetch_image(Radar_url[0], "Radar")
+def Radar():
+    Radar_url = get_image_url(URL["Radar"], [1], "雷達迴波圖")
+    fetch_image(Radar_url[0], "Radar")
 
 # 流場圖
-fetch_image(URL["StreamLine"], "StreamLine")
+def StreamLine():
+    fetch_image(URL["StreamLine"], "StreamLine")
 
 # 衛星雲圖
-driver.get(URL["Satellate"])
-button = driver.find_element(By.LINK_TEXT, "真實色")
-button.click()
-Satellite_Images_URL = driver.find_elements(By.CLASS_NAME, "img-responsive")[1].get_attribute("src")
-fetch_image(Satellite_Images_URL, "Satellite")
+def Satellate():
+    driver.get(URL["Satellate"])
+    button = driver.find_element(By.LINK_TEXT, "真實色")
+    button.click()
+    Satellite_Images_URL = driver.find_elements(By.CLASS_NAME, "img-responsive")[1].get_attribute("src")
+    fetch_image(Satellite_Images_URL, "Satellite")
 
 # CWA定量降水
-location_range = list(range(2,10)) # list中第2~10是QPF網址
-QPF_url = get_image_url(URL["QPF"], location_range, "QPF")
-QPF_list = QPF_fetch_image(QPF_url)
-QPF_6hr = QPF_list[4:]
-QPF_12hr = QPF_list[:4]
-combine_image(QPF_6hr, 6)
-combine_image(QPF_12hr, 12)
+def QPF():
+    location_range = list(range(2,10)) # list中第2~10是QPF網址
+    QPF_url = get_image_url(URL["QPF"], location_range, "QPF")
+    QPF_list = QPF_fetch_image(QPF_url)
+    QPF_6hr = QPF_list[4:]
+    QPF_12hr = QPF_list[:4]
+    combine_image(QPF_6hr, 6)
+    combine_image(QPF_12hr, 12)
+
+def RainMap():
+    # RainMap今日累積雨量圖資
+    fetch_image(URL["RainMap_accumulate"], "E_image")
+    
+    # RainMap每日06時累積雨量
+    fetch_image(URL["RainMap_06"], "E_06_image")
+    
+    # RainMap昨日累積雨量
+    fetch_image(URL["RainMap_yday"], "E_yday_image")
+
+
+thread1 = threading.Thread(target = SWM)
+thread2 = threading.Thread(target = Radar)
+thread3 = threading.Thread(target = StreamLine)
+thread4 = threading.Thread(target = Satellate)
+thread5 = threading.Thread(target = QPF)
+thread6 = threading.Thread(target = RainMap)
+        
+thread1.start()
+thread2.start()
+thread3.start()
+thread4.start()
+thread5.start()
+thread6.start()
+
+thread1.join()
+thread2.join()
+thread3.join()
+thread4.join()
+thread5.join()
+thread6.join()
 
 driver.quit()
-
-# RainMap今日累積雨量圖資
-fetch_image(URL["RainMap_accumulate"], "E_image")
-
-# RainMap每日06時累積雨量
-fetch_image(URL["RainMap_06"], "E_06_image")
-
-# RainMap昨日累積雨量
-fetch_image(URL["RainMap_yday"], "E_yday_image")
