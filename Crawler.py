@@ -47,10 +47,13 @@ URL ={
       "RainMap_oneHourAgo" : f"http://tidpweather.vpnplus.to:50020/RainMap/Taiwan/TW_{now.year}{now.month}{now.day}_{one_hours_ago.hour}00.png"
       }
 
-# 設置webdriver頁面加載策略 (normal、eager、none)
+
 options = Options()
+
 # selenium headless模式，不顯示視窗
 options.add_argument("--headless")
+
+# 設置webdriver頁面加載策略 (normal、eager、none)
 options.page_load_strategy = "normal"
 
 driver = webdriver.Chrome(options=options)
