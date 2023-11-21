@@ -11,6 +11,7 @@ from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pptx.util import Pt
 from pptx.dml.color import RGBColor
 from datetime import datetime, timedelta
+from PIL import Image, ImageDraw, ImageOps
 import re
 import os
 
@@ -20,7 +21,7 @@ next_day = now + timedelta(days = 1)
 day_after_tomorrow = now + timedelta(days = 2)
 
 path = rf"C:\Users\User\Desktop\ppt_自動化\{now.year}{now.month}{now.day}"
-ppt_path = r"C:\Users\User\Desktop\ppt_自動化\result\本局-20231113 未來三日天氣分析報告.pptx"
+ppt_path = r"C:\Users\User\Desktop\ppt_自動化\20231120\本局-20231120 未來三日天氣分析報告.pptx"
 os.chdir(path)
 
 try:
@@ -78,7 +79,7 @@ def table_update_date(slide, start, end, RGB, size):
 
 first_page_pattern = r"時間：\d{3}年\d{1,2}月\d{1,2}日 \d{4}時"
 SWM_pattern = r"\d{1,2}月\d{1,2}日 02:00 地面天氣圖"
-Satellite_pattern = r"\d{1,2}月\d{1,2}日 \d{1,2}:00 衛星雲圖"
+Satellite_pattern = r"\d{1,2}月\d{1,2}日 \d{1,2}:\d{1,2} 衛星雲圖"
 StreamLine_pattern = r"\d{1,2}月\d{1,2}日 05:00 700-850hPa 平均駛流場圖"
 yday_accumulate_pattern = r"昨\(\d{1,2}\)日 累積雨量"
 tday_accumulate_pattern = r"今\(\d{1,2}\)日 00-\d{2}時 累積雨量"
@@ -109,7 +110,6 @@ table_update_date(seventh_slide, 3, 6, RGBColor(00,00,00), 18)
 
 
 
-
 # 更換圖資
 def change_img(slide, img, left):
     
@@ -119,7 +119,7 @@ def change_img(slide, img, left):
             # 刪除圖片
             sp = shape._element
             sp.getparent().remove(sp)
-            # 插入新圖片
+
             slide.shapes.add_picture(img,  left, top, width, height)
             print(f"{img} success")
             print(img, left, top, width, height, "\n")
