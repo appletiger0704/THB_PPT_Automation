@@ -11,7 +11,6 @@ from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pptx.util import Pt
 from pptx.dml.color import RGBColor
 from datetime import datetime, timedelta
-from PIL import Image, ImageDraw, ImageOps
 import re
 import os
 
@@ -77,7 +76,7 @@ def table_update_date(slide, start, end, RGB, size):
                 font(slide_text_box, Date_String, RGB, size)
 
 
-first_page_pattern = r"時間：\d{3}年\d{1,2}月\d{1,2}日 \d{4}時"
+first_page_pattern = r"\d{3}年\d{1,2}月\d{1,2}日 \d{4}時"
 SWM_pattern = r"\d{1,2}月\d{1,2}日 02:00 地面天氣圖"
 Satellite_pattern = r"\d{1,2}月\d{1,2}日 \d{1,2}:\d{1,2} 衛星雲圖"
 StreamLine_pattern = r"\d{1,2}月\d{1,2}日 05:00 700-850hPa 平均駛流場圖"

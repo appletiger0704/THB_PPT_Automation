@@ -185,6 +185,27 @@ def RainMap():
     fetch_image(URL["RainMap_yday"], "E_yday_image")
 
 
+# if __name__ == "__main__":
+#     p1 = multiprocessing.Process(target=SWM)
+#     p2 = multiprocessing.Process(target=Radar)
+#     p3 = multiprocessing.Process(target=StreamLine)
+#     p4 = multiprocessing.Process(target=Satellate)
+#     p5 = multiprocessing.Process(target=QPF)
+#     # p6 = multiprocessing.Process(target=RainMap)
+    
+#     p1.start()
+#     p2.start()
+#     p3.start()
+#     p4.start()
+#     p5.start()
+#     # p6.start()
+    
+#     p1.join()
+#     p2.join()
+#     p3.join()
+#     p4.join()
+#     p5.join()
+#     # p6.join()
 thread1 = threading.Thread(target = SWM)
 thread2 = threading.Thread(target = Radar)
 thread3 = threading.Thread(target = StreamLine)
