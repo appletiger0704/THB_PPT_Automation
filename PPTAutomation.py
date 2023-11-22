@@ -18,9 +18,12 @@ now = datetime.now()
 yesterday = now - timedelta(days = 1)
 next_day = now + timedelta(days = 1)
 day_after_tomorrow = now + timedelta(days = 2)
+format_date = now.strftime("%Y%m%d")
+format_ydate = yesterday.strftime("%Y%m%d")
 
-path = rf"C:\Users\User\Desktop\ppt_自動化\{now.year}{now.month}{now.day}"
-ppt_path = r"C:\Users\User\Desktop\ppt_自動化\20231120\本局-20231120 未來三日天氣分析報告.pptx"
+
+path = rf"C:\Users\User\Desktop\ppt_自動化\{format_date}"
+ppt_path = rf"C:\Users\User\Desktop\ppt_自動化\{format_ydate}\本局-{format_ydate} 未來三日天氣分析報告.pptx"
 os.chdir(path)
 
 try:
@@ -124,9 +127,9 @@ def change_img(slide, img, left):
             print(img, left, top, width, height, "\n")
             break
 
-change_img(second_slide, "Satellite.png", 6988336)
-change_img(second_slide, "SWM.png", 1106797)   
-change_img(thrid_slide, "StreamLine.png", 835086)
+change_img(second_slide, "round_Satellite.png", 6988336)
+change_img(second_slide, "round_SWM.png", 1106797)   
+change_img(thrid_slide, "round_StreamLine.png", 835086)
 change_img(forth_slide, "E_06_image.png", 6816100)
 change_img(forth_slide, "E_yday_image.png", 1403989)
 

@@ -13,8 +13,12 @@ start = time.time()
 first_process = subprocess.Popen(["python", "Crawler.py"])
 first_process.wait()
 
-second_process = subprocess.Popen(["python", "PPTAutomation.py"])
+second_process = subprocess.Popen(["python", "circle_corner.py"])
+second_process.wait()
+
+last_process = subprocess.Popen(["python", "PPTAutomation.py"])
 
 end = time.time()
 cost_time = end - start
-print(f"程式花費時間：{cost_time}")    
+print(f"程式花費時間：{cost_time}")
+
