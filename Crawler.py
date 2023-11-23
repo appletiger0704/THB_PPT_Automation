@@ -60,21 +60,27 @@ driver = webdriver.Chrome(options=options)
 
 
 def write_txt(text):
+    
     date = now.strftime("%y%m%d")
+    
     with open(os.path.join(path, f"{date}_img.txt"), 'a') as file:
+        
         file.write(text + "\n")
         
 
 
 # 擷取氣象局圖資網址 (除了QPF)
 def get_image_url(url, location, item):
+    
     url_list = []
     
     try:
+        
         driver = webdriver.Chrome(options=options)
         driver.get(url)
         
         for i in location :
+            
             # 先等瀏覽器載入所有元素，最多等10秒鐘
             elements = WebDriverWait(driver, 10).until(
             EC.presence_of_all_elements_located((By.CLASS_NAME, "img-responsive")))
@@ -83,47 +89,59 @@ def get_image_url(url, location, item):
             url_list.append(img_url)
             
     except Exception as e:
+        
         write_txt(f"{item} Exception:{e}")
         
     finally:
+        
         driver.quit()
+        
         return url_list
 
 
 # 儲存成png檔案ng檔案
 def fetch_image(url, image_name):
+    
     response = requests.get(url)
     
     if response.status_code == 200 :
+        
         with Image.open(BytesIO(response.content)) as image:
+            
             image.save(os.path.join(path, f"{image_name}.png"))
             
     elif url == URL["RainMap_accumulate"] and response.status_code != 200:
+        
            write_txt(f"RainMap has not been update cumulate rainfull for {now.hour}, using previous hours data")
            print(f"RainMap has not been update cumulate rainfull for {now.hour}, using previous hours data")
            fetch_image(URL["RainMap_oneHourAgo"], "E_image")
            
     else :
+        
          write_txt(f"{image_name} Exception:{response.status_code}" + "\n")
          print(f"{image_name} Exception:{response.status_code}")
 
 
 # 擷取QPF圖資網址
 def QPF_fetch_image(QPF_url):
+    
     QPF_list = []
     
     for url in QPF_url:
+        
         pattern = r"_ChFcstPrecip_([\w_]+)\.png"
         match = re.search(pattern, url)
         img_name = match[1]
         
         try:
+            
             response = requests.get(url)
             QPF_image = Image.open(BytesIO(response.content))
             QPF_image.save(os.path.join(path, f"{img_name}QPF.png"))
             QPF_list.append(QPF_image)
             
         except Exception as e:
+            
             write_txt(f"QPF Exception：{e}")
             
     return QPF_list
@@ -131,9 +149,11 @@ def QPF_fetch_image(QPF_url):
 
 # 結合QPF圖資
 def combine_image(QPF_list, forecast_range):
+    
     bg = Image.new("RGBA", (2490, 3000), "#FFFFFF")
     
     for i in range(1,5):
+        
         image = QPF_list[i-1]
         x = (i-1) % 2
         y = (i-1) // 2
@@ -144,28 +164,45 @@ def combine_image(QPF_list, forecast_range):
 
 # 地面天氣圖
 def SWM():
+    
     SWM_url = get_image_url(URL["SWM"], [2], "地面天氣圖")
     fetch_image(SWM_url[0], "SWM")
 
+
 # 雷達迴波圖
 def Radar():
+    
     Radar_url = get_image_url(URL["Radar"], [1], "雷達迴波圖")
     fetch_image(Radar_url[0], "Radar")
 
+
 # 流場圖
 def StreamLine():
+    
     fetch_image(URL["StreamLine"], "StreamLine")
+
 
 # 衛星雲圖
 def Satellate():
-    driver.get(URL["Satellate"])
-    button = driver.find_element(By.LINK_TEXT, "真實色")
-    button.click()
-    Satellite_Images_URL = driver.find_elements(By.CLASS_NAME, "img-responsive")[1].get_attribute("src")
-    fetch_image(Satellite_Images_URL, "Satellite")
+    
+    img_0700 = f"https://www.cwa.gov.tw/Data/satellite/TWI_VIS_TRGB_1375/TWI_VIS_TRGB_1375-{now.year}-{now.month}-{now.day}-07-00.jpg"
+
+    if requests.get(img_0700).status_code == 200:
+        
+        fetch_image(img_0700, "Satellite")
+        
+    else:
+        
+        driver.get(URL["Satellate"])
+        button = driver.find_element(By.LINK_TEXT, "真實色")
+        button.click()
+        Satellite_Images_URL = driver.find_elements(By.CLASS_NAME, "img-responsive")[1].get_attribute("src")
+        fetch_image(Satellite_Images_URL, "Satellite")
+
 
 # CWA定量降水
 def QPF():
+    
     location_range = list(range(2,10)) # list中第2~10是QPF網址
     QPF_url = get_image_url(URL["QPF"], location_range, "QPF")
     QPF_list = QPF_fetch_image(QPF_url)
@@ -174,7 +211,9 @@ def QPF():
     combine_image(QPF_6hr, 6)
     combine_image(QPF_12hr, 12)
 
+
 def RainMap():
+    
     # RainMap今日累積雨量圖資
     fetch_image(URL["RainMap_accumulate"], "E_image")
     
@@ -183,6 +222,7 @@ def RainMap():
     
     # RainMap昨日累積雨量
     fetch_image(URL["RainMap_yday"], "E_yday_image")
+
 
 
 # if __name__ == "__main__":
@@ -206,6 +246,8 @@ def RainMap():
 #     p4.join()
 #     p5.join()
 #     # p6.join()
+
+
 thread1 = threading.Thread(target = SWM)
 thread2 = threading.Thread(target = Radar)
 thread3 = threading.Thread(target = StreamLine)

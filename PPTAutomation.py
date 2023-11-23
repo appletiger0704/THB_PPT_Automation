@@ -23,17 +23,23 @@ format_ydate = yesterday.strftime("%Y%m%d")
 
 
 path = rf"C:\Users\User\Desktop\ppt_自動化\{format_date}"
-ppt_path = rf"C:\Users\User\Desktop\ppt_自動化\{format_ydate}\本局-{format_ydate} 未來三日天氣分析報告.pptx"
+ppt_path = rf"C:\Users\User\Desktop\ppt_自動化\{format_date}\本局-{format_date} 未來三日天氣分析報告.pptx"
+ppt_ypath = rf"C:\Users\User\Desktop\ppt_自動化\{format_ydate}\本局-{format_ydate} 未來三日天氣分析報告.pptx"
 os.chdir(path)
 
-try:
-    prs = Presentation(ppt_path)
-    
-except Exception as e:
-    print(e)
     
 def convert_to_minguo(year):
+    
     return year - 1911
+
+
+
+def write_txt(text):
+    date = now.strftime("%y%m%d")
+    with open(os.path.join(path, f"{date}_img.txt"), 'a') as file:
+        file.write(text + "\n")
+
+
 
 # 字型設定
 def font(textbox, Date_String, RGB, size):
@@ -62,7 +68,8 @@ def update_date(slide, re_express, Date_String, RGB, size):
                     break 
                 
         except Exception as e:
-            print(f"{slide} update have unexpected exception: {e}")
+            write_txt(f"{slide} update have unexpected exception: {e}")
+
 
 # 更新表格內日期
 def table_update_date(slide, start, end, RGB, size):
@@ -77,6 +84,23 @@ def table_update_date(slide, start, end, RGB, size):
                 elif i == (start + 2):
                     Date_String = f"後({day_after_tomorrow.day})日"
                 font(slide_text_box, Date_String, RGB, size)
+                
+                
+try:
+    if os.path.exists(ppt_path):
+        
+        write_txt("採用今日簡報")
+        prs = Presentation(ppt_path)
+    
+    else:
+        
+        write_txt("採用昨日簡報")
+        prs = Presentation(ppt_ypath)
+    
+except Exception as e:
+    write_txt(f"exception occur when open ppt, error：{e}")
+    
+    
 
 
 first_page_pattern = r"\d{3}年\d{1,2}月\d{1,2}日 \d{4}時"
@@ -105,10 +129,12 @@ update_date(forth_slide, yday_accumulate_pattern, f"昨({yesterday.day})日 累�
 update_date(forth_slide, tday_accumulate_pattern, f"今({now.day})日 00-06時 累積雨量", RGBColor(12,51,115), 18)
 update_date(fifth_slide, today_QPF_pattern, f"今({now.day})日", RGBColor(12,51,115), 18)
 update_date(fifth_slide, tomorrow_QPF_pattern, f"明({next_day.day})日", RGBColor(12,51,115), 18)
-update_date(fifth_slide, day_after_tomorrow_QPF_pattern, f"今({day_after_tomorrow.day})日", RGBColor(12,51,115), 18)
+update_date(fifth_slide, day_after_tomorrow_QPF_pattern, f"後({day_after_tomorrow.day})日", RGBColor(12,51,115), 18)
 table_update_date(fifth_slide, 1, 4, RGBColor(00,00,00), 18)
 table_update_date(sixth_slide, 3, 6, RGBColor(00,00,00), 18)
 table_update_date(seventh_slide, 3, 6, RGBColor(00,00,00), 18)
+
+
 
 
 
@@ -123,9 +149,11 @@ def change_img(slide, img, left):
             sp.getparent().remove(sp)
 
             slide.shapes.add_picture(img,  left, top, width, height)
-            print(f"{img} success")
-            print(img, left, top, width, height, "\n")
+            
+            write_txt(f"{img} success  ")
+            write_txt(f"{img}, {left}, {top}, {width}, {height} \n")
             break
+
 
 change_img(second_slide, "round_Satellite.png", 6988336)
 change_img(second_slide, "round_SWM.png", 1106797)   
@@ -133,5 +161,5 @@ change_img(thrid_slide, "round_StreamLine.png", 835086)
 change_img(forth_slide, "E_06_image.png", 6816100)
 change_img(forth_slide, "E_yday_image.png", 1403989)
 
-format_date = now.strftime("%Y%m%d")
+
 prs.save(f'本局-{format_date} 未來三日天氣分析報告.pptx')
