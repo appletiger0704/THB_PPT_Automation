@@ -11,6 +11,7 @@ from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pptx.util import Pt
 from pptx.dml.color import RGBColor
 from datetime import datetime, timedelta
+import pandas as pd 
 import re
 import os
 
@@ -22,9 +23,14 @@ format_date = now.strftime("%Y%m%d")
 format_ydate = yesterday.strftime("%Y%m%d")
 
 
+# 程式執行位置
 path = rf"C:\Users\User\Desktop\ppt_自動化\{format_date}"
+# 今日檔案位置
 ppt_path = rf"C:\Users\User\Desktop\ppt_自動化\{format_date}\本局-{format_date} 未來三日天氣分析報告.pptx"
+# 昨日檔案位置
 ppt_ypath = rf"C:\Users\User\Desktop\ppt_自動化\{format_ydate}\本局-{format_ydate} 未來三日天氣分析報告.pptx"
+# 昨日雨量csv檔案位置
+csv_path = rf"C:\Users\User\Desktop\ppt_自動化\yday_accumulate\{format_date}\{format_ydate}_累積雨量.csv"
 os.chdir(path)
 
     
@@ -121,7 +127,7 @@ fifth_slide = prs.slides[4]
 sixth_slide = prs.slides[5]
 seventh_slide = prs.slides[6]
 
-update_date(first_slide, first_page_pattern, f"{convert_to_minguo(now.year)}年{now.month}月{now.day}日 09:00時", RGBColor(00,00,00), 24)
+update_date(first_slide, first_page_pattern, f"{convert_to_minguo(now.year)}年{now.month}月{now.day}日 0900時", RGBColor(00,00,00), 24)
 update_date(second_slide, SWM_pattern, f"{now.month}月{now.day}日 02:00 地面天氣圖", RGBColor(12,51,115), 18)
 update_date(second_slide, Satellite_pattern, f"{now.month}月{now.day}日 07:00 衛星雲圖", RGBColor(12,51,115), 18)
 update_date(thrid_slide, StreamLine_pattern, f"{now.month}月{now.day}日 05:00 700-850hPa 平均駛流場圖", RGBColor(12,51,115), 18)
@@ -160,6 +166,55 @@ change_img(second_slide, "round_SWM.png", 1106797)
 change_img(thrid_slide, "round_StreamLine.png", 835086)
 change_img(forth_slide, "E_06_image.png", 6816100)
 change_img(forth_slide, "E_yday_image.png", 1403989)
+
+
+
+
+
+#====================
+
+# 回傳一個list
+def read_csv(path):
+    
+    df = pd.read_csv(csv_path, encoding="big5")
+
+    df.set_index("Unnamed: 0", inplace=True)
+
+    df.index.name = "測站"
+    
+    df_dict = df.to_dict(orient="dict")[f"昨日({format_ydate})累積雨量"]
+    
+    rainfall_list = []
+    
+    for key, item in df_dict.items():
+        
+        rainfall_list.append(str(item))
+    
+    return rainfall_list
+
+
+
+# 昨日累積雨量
+def table_yday_rainfall(slide, start, end):
+        
+    for shape in slide.shapes:
+        
+        if shape.shape_type == MSO_SHAPE_TYPE.TABLE:
+            
+            count = 1
+            
+            for item in read_csv(csv_path)[start:end]:
+                
+                rainfall_box = shape.table.cell(count,2)
+                font(rainfall_box, item, RGBColor(00,00,00), 16)
+                count = count + 1
+                
+
+
+table_yday_rainfall(sixth_slide, 0, 10)
+table_yday_rainfall(seventh_slide,10, 21)
+
+
 
 
 prs.save(f'本局-{format_date} 未來三日天氣分析報告.pptx')
