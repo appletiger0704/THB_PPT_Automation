@@ -12,6 +12,7 @@ from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pptx.util import Pt
 from pptx.dml.color import RGBColor
 from datetime import datetime, timedelta
+import pandas as pd
 import re
 import os
 import gc
@@ -32,8 +33,8 @@ yday = yesterday.strftime("%Y%m%d")
 # 設定路徑
 path = rf"C:\Users\user\Desktop\自動化separate\THB_PPT_Automation\{today}"
 yday_ppt_path = rf"C:\Users\user\Desktop\自動化separate\THB_PPT_Automation\{yday}\本局-{yday} 未來三日天氣分析報告.pptx"
+csv_path = rf"C:\Users\user\Desktop\自動化separate\THB_PPT_Automation\yday_accumulate\{today}\{yday}_累積雨量.csv"
 os.chdir(path)
-    
     
 
 def write_txt(text):
@@ -170,6 +171,55 @@ change_img(second_slide, "round_SWM.png", 1106797)
 change_img(thrid_slide, "round_StreamLine.png", 835086)
 # change_img(forth_slide, "E_06_image.png", 6816100)
 # change_img(forth_slide, "E_yday_image.png", 1403989)
+
+
+
+
+
+# ===========================
+
+
+# 回傳一個list
+def read_csv(path):
+    
+    df = pd.read_csv(csv_path, encoding="big5")
+
+    df.set_index("Unnamed: 0", inplace=True)
+
+    df.index.name = "測站"
+    
+    df_dict = df.to_dict(orient="dict")[f"昨日({yday})累積雨量"]
+    
+    rainfall_list = []
+    
+    for key, item in df_dict.items():
+        
+        rainfall_list.append(str(item))
+    
+    return rainfall_list
+
+
+
+# 昨日累積雨量
+def table_yday_rainfall(slide, start, end):
+        
+    for shape in slide.shapes:
+        
+        if shape.shape_type == MSO_SHAPE_TYPE.TABLE:
+            
+            count = 1
+            
+            for item in read_csv(csv_path)[start:end]:
+                
+                rainfall_box = shape.table.cell(count,2)
+                font(rainfall_box, item, RGBColor(00,00,00), 16)
+                count = count + 1
+                
+
+
+table_yday_rainfall(sixth_slide, 0, 10)
+table_yday_rainfall(seventh_slide,10, 21)
+
 
 try:
     

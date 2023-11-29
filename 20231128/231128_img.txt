@@ -1,0 +1,57 @@
+採用昨日簡報
+round_Satellite.png success
+round_Satellite.png, 6997147 
+
+round_SWM.png success
+round_SWM.png, 1115999 
+
+round_StreamLine.png success
+round_StreamLine.png, 835087 
+
+簡報存成功
+採用今日簡報
+round_Satellite.png success
+round_Satellite.png, 6997147 
+
+round_SWM.png success
+round_SWM.png, 1115999 
+
+round_StreamLine.png success
+round_StreamLine.png, 835087 
+
+簡報存成功
+採用今日簡報
+round_Satellite.png success
+round_Satellite.png, 6997147 
+
+round_SWM.png success
+round_SWM.png, 1115999 
+
+round_StreamLine.png success
+round_StreamLine.png, 835087 
+
+簡報存成功
+採用今日簡報
+round_Satellite.png success
+round_Satellite.png, 6997147 
+
+round_SWM.png success
+round_SWM.png, 1115999 
+
+round_StreamLine.png success
+round_StreamLine.png, 835087 
+
+簡報存成功
+雷達迴波圖 Exception:('Connection aborted.', ConnectionResetError(10054, '遠端主機已強制關閉一個現存的連線。', None, 10054, None))
+QPF Exception:('Connection aborted.', ConnectionResetError(10054, '遠端主機已強制關閉一個現存的連線。', None, 10054, None))
+採用今日簡報
+round_Satellite.png success
+round_Satellite.png, 6997147 
+
+round_SWM.png success
+round_SWM.png, 1115999 
+
+round_StreamLine.png success
+round_StreamLine.png, 835087 
+
+簡報存成功
