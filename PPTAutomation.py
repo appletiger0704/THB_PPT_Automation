@@ -210,11 +210,14 @@ def table_yday_rainfall(slide, start, end):
                 count = count + 1
                 
 
+try:
 
-table_yday_rainfall(sixth_slide, 0, 10)
-table_yday_rainfall(seventh_slide,10, 21)
+    table_yday_rainfall(sixth_slide, 0, 10)
+    table_yday_rainfall(seventh_slide,10, 21)
 
-
+except:
+    
+    write_txt("未更新監控路段昨日雨量")
 
 
 prs.save(f'本局-{format_date} 未來三日天氣分析報告.pptx')

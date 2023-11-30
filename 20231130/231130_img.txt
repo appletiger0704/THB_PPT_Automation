@@ -1,0 +1,67 @@
+RainMap has not been update cumulate rainfull for 9, using previous hours data
+E_image Exception:404
+
+採用昨日簡報
+round_Satellite.png success  
+round_Satellite.png, 6988336, 1192805, 4115909, 4098286 
+
+round_SWM.png success  
+round_SWM.png, 1106797, 1203425, 5617572, 4087665 
+
+round_StreamLine.png success  
+round_StreamLine.png, 835086, 917939, 8164269, 4082134 
+
+E_06_image.png success  
+E_06_image.png, 6816100, 647559, 3837022, 3837022 
+
+E_yday_image.png success  
+E_yday_image.png, 1403989, 754602, 3729979, 3729979 
+
+採用昨日簡報
+round_Satellite.png success  
+round_Satellite.png, 6988336, 1192805, 4115909, 4098286 
+
+round_SWM.png success  
+round_SWM.png, 1106797, 1203425, 5617572, 4087665 
+
+round_StreamLine.png success  
+round_StreamLine.png, 835086, 917939, 8164269, 4082134 
+
+E_06_image.png success  
+E_06_image.png, 6816100, 647559, 3837022, 3837022 
+
+E_yday_image.png success  
+E_yday_image.png, 1403989, 754602, 3729979, 3729979 
+
+採用昨日簡報
+round_Satellite.png success  
+round_Satellite.png, 6988336, 1192805, 4115909, 4098286 
+
+round_SWM.png success  
+round_SWM.png, 1106797, 1203425, 5617572, 4087665 
+
+round_StreamLine.png success  
+round_StreamLine.png, 835086, 917939, 8164269, 4082134 
+
+E_06_image.png success  
+E_06_image.png, 6816100, 647559, 3837022, 3837022 
+
+E_yday_image.png success  
+E_yday_image.png, 1403989, 754602, 3729979, 3729979 
+
+採用今日簡報
+round_Satellite.png success  
+round_Satellite.png, 6988336, 1192805, 4115909, 4098286 
+
+round_SWM.png success  
+round_SWM.png, 1106797, 1203425, 5617572, 4087665 
+
+round_StreamLine.png success  
+round_StreamLine.png, 835086, 917939, 8164269, 4082134 
+
+E_06_image.png success  
+E_06_image.png, 6816100, 647559, 3837022, 3837022 
+
+E_yday_image.png success  
+E_yday_image.png, 1403989, 754602, 3729979, 3729979 
+

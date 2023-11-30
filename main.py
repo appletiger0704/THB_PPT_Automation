@@ -19,6 +19,10 @@ second_process = subprocess.Popen(["python", "circle_corner.py"])
 second_process.wait()
 
 
+thrid_process = subprocess.Popen(["python", "CWA_API.py"])
+thrid_process.wait()
+
+
 last_process = subprocess.Popen(["python", "PPTAutomation.py"])
 last_process.wait()
 

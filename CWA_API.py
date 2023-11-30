@@ -133,6 +133,7 @@ def wra_exe():
     
     for key, url in WRA_URL.items():
         
+        
         try:
             
             raw_data = pd.read_json(url)
@@ -160,6 +161,7 @@ except Exception as e:
     write_txt(e)
 
 
+
 # 擷取CWA雨量站資料
 for i in raw_data.records.Station:
     
@@ -173,29 +175,23 @@ for i in raw_data.records.Station:
     
     
     
-    # 德基、梨山 雨量站比較，紀錄較大值
-    Deji_Lishan_Rainfall = 0
-    
+    # 德基、梨山 雨量站比較，紀錄較大值    
     if station_name == "德基" or station_name == "梨山" :
         
-        if yday_rainfall >= Deji_Lishan_Rainfall:
+        if data["德基、梨山"] == None or yday_rainfall >= data["德基、梨山"]:
             
-            Deji_Lishan_Rainfall = yday_rainfall
+            data["德基、梨山"] = yday_rainfall
             
-        data["德基、梨山"] = Deji_Lishan_Rainfall
         
         
         
-    # 廬山、合歡山 雨量站比較，紀錄較大值
-    Lushan_Hehuan_Rainfall = 0
-    
+    # 廬山、合歡山 雨量站比較，紀錄較大值    
     if station_name == "廬山" or station_name == "合歡山" :
         
-        if yday_rainfall >= Lushan_Hehuan_Rainfall:
+        if  data["廬山、合歡山"] == None or yday_rainfall >=  data["廬山、合歡山"]:
             
-            Lushan_Hehuan_Rainfall = yday_rainfall
+            data["廬山、合歡山"] = yday_rainfall
             
-        data["廬山、合歡山"] = Lushan_Hehuan_Rainfall
         
     
     
