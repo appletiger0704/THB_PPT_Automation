@@ -1,0 +1,83 @@
+採用昨日簡報
+exception occur when open ppt, error：Package not found at 'C:\Users\User\Desktop\ppt_自動化\20240218\本局-20240218 未來三日天氣分析報告.pptx'
+RainMap has not been update cumulate rainfull for 19, using previous hours data
+E_image Exception:404
+
+E_06_image Exception:404
+
+採用昨日簡報
+exception occur when open ppt, error：Package not found at 'C:\Users\User\Desktop\ppt_自動化\20240218\本局-20240218 未來三日天氣分析報告.pptx'
+RainMap has not been update cumulate rainfull for 19, using previous hours data
+E_image Exception:404
+
+E_06_image Exception:404
+
+採用昨日簡報
+exception occur when open ppt, error：Package not found at 'C:\Users\User\Desktop\ppt_自動化\20240218\本局-20240218 未來三日天氣分析報告.pptx'
+RainMap has not been update cumulate rainfull for 19, using previous hours data
+E_image Exception:404
+
+E_06_image Exception:404
+
+採用昨日簡報
+exception occur when open ppt, error：Package not found at 'C:\Users\User\Desktop\ppt_自動化\20240218\本局-20240218 未來三日天氣分析報告.pptx'
+採用昨日簡報
+exception occur when open ppt, error：Package not found at 'C:\Users\User\Desktop\ppt_自動化\20240218\本局-20240218 未來三日天氣分析報告.pptx'
+採用今日簡報
+round_Satellite.png success  
+round_Satellite.png, 6997147, 1192805, 4098286, 4098286 
+
+round_SWM.png success  
+round_SWM.png, 1116000, 1192805, 5604167, 4087654 
+
+round_StreamLine.png success  
+round_StreamLine.png, 842400, 918000, 8158168, 4079084 
+
+簡報儲存成功
+RainMap has not been update cumulate rainfull for 19, using previous hours data
+採用今日簡報
+round_Satellite.png success  
+round_Satellite.png, 6997147, 1192805, 4098286, 4098286 
+
+round_SWM.png success  
+round_SWM.png, 1116000, 1192805, 5604167, 4087654 
+
+round_StreamLine.png success  
+round_StreamLine.png, 842400, 918000, 8158168, 4079084 
+
+簡報儲存失敗：[Errno 13] Permission denied: '本局-20240219 未來三日天氣分析報告.pptx'
+採用今日簡報
+round_Satellite.png success  
+round_Satellite.png, 6997147, 1192805, 4098286, 4098286 
+
+round_SWM.png success  
+round_SWM.png, 1116000, 1192805, 5604167, 4087654 
+
+round_StreamLine.png success  
+round_StreamLine.png, 842400, 918000, 8158168, 4079084 
+
+簡報儲存成功
+RainMap has not been update cumulate rainfull for 19, using previous hours data
+採用今日簡報
+round_Satellite.png success  
+round_Satellite.png, 6997147, 1192805, 4098286, 4098286 
+
+round_SWM.png success  
+round_SWM.png, 1116000, 1192805, 5604167, 4087654 
+
+round_StreamLine.png success  
+round_StreamLine.png, 842400, 918000, 8158168, 4079084 
+
+簡報儲存成功
+RainMap has not been update cumulate rainfull for 19, using previous hours data
+採用今日簡報
+round_Satellite.png success  
+round_Satellite.png, 6997147, 1192805, 4098286, 4098286 
+
+round_SWM.png success  
+round_SWM.png, 1116000, 1192805, 5604167, 4087654 
+
+round_StreamLine.png success  
+round_StreamLine.png, 842400, 918000, 8158168, 4079084 
+
+簡報儲存成功

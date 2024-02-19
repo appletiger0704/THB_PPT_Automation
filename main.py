@@ -7,6 +7,9 @@ Created on Mon Nov 20 14:06:04 2023
 
 import subprocess
 import time
+import os
+
+os.chdir(r"C:\Users\User\Desktop\ppt_自動化\program")
 
 
 
@@ -33,4 +36,7 @@ cost_time = end - start
 
 
 print(f"程式花費時間：{cost_time}")
+
+input("Press Enter to exit...")
+
 
